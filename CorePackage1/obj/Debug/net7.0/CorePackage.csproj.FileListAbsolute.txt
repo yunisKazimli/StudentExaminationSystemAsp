@@ -1,0 +1,12 @@
+D:\Projects\VSprojects\StudentExaminationSystemAsp\CorePackage1\bin\Debug\net7.0\CorePackage.deps.json
+D:\Projects\VSprojects\StudentExaminationSystemAsp\CorePackage1\bin\Debug\net7.0\CorePackage.dll
+D:\Projects\VSprojects\StudentExaminationSystemAsp\CorePackage1\bin\Debug\net7.0\CorePackage.pdb
+D:\Projects\VSprojects\StudentExaminationSystemAsp\CorePackage1\obj\Debug\net7.0\CorePackage.csproj.AssemblyReference.cache
+D:\Projects\VSprojects\StudentExaminationSystemAsp\CorePackage1\obj\Debug\net7.0\CorePackage.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\VSprojects\StudentExaminationSystemAsp\CorePackage1\obj\Debug\net7.0\CorePackage.AssemblyInfoInputs.cache
+D:\Projects\VSprojects\StudentExaminationSystemAsp\CorePackage1\obj\Debug\net7.0\CorePackage.AssemblyInfo.cs
+D:\Projects\VSprojects\StudentExaminationSystemAsp\CorePackage1\obj\Debug\net7.0\CorePackage.csproj.CoreCompileInputs.cache
+D:\Projects\VSprojects\StudentExaminationSystemAsp\CorePackage1\obj\Debug\net7.0\CorePackage.dll
+D:\Projects\VSprojects\StudentExaminationSystemAsp\CorePackage1\obj\Debug\net7.0\refint\CorePackage.dll
+D:\Projects\VSprojects\StudentExaminationSystemAsp\CorePackage1\obj\Debug\net7.0\CorePackage.pdb
+D:\Projects\VSprojects\StudentExaminationSystemAsp\CorePackage1\obj\Debug\net7.0\ref\CorePackage.dll

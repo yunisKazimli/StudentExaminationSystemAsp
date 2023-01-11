@@ -1,0 +1,37 @@
+﻿using CorePackage.DataAccess.EntityFramework;
+using CorePackage.Entities;
+using CorePackage.Entities.Concrete;
+using DataAccess.Interface.Identity;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DataAccess.Concrete.Identity
+{
+    public class AuthDal : AuthDbContext, IAuthDal
+    {
+        public T Get<T>(Expression<Func<T, bool>> filter) where T : class
+        {
+            using var context = new AuthDbContext();
+            return context.Set<T>().SingleOrDefault(filter);
+        }
+
+        public void Add<T>(T entity)
+        {
+            using var context = new AuthDbContext();
+            var addEntity = context.Entry(entity);
+            addEntity.State = EntityState.Added;
+            context.SaveChanges();
+        }
+
+        public List<T> GetSome<T>(Expression<Func<T, bool>> filter) where T : class
+        {
+            using var context = new AuthDbContext();
+            return context.Set<T>().ToList();
+        }
+    }
+}
