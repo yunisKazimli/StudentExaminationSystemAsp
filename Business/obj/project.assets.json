@@ -3591,25 +3591,28 @@
   "packageFolders": {
     "C:\\Users\\yunis\\.nuget\\packages\\": {},
     "D:\\Programms\\DevExpress\\Offline Packages": {},
+    "D:\\Programms\\DevExpress\\Components\\Offline Packages": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Projects\\VSprojects\\StudentExaminationSystemAsp\\Business\\Business.csproj",
+      "projectUniqueName": "D:\\Projects\\VSprojects\\ActiveProjects\\StudentExaminationSystemAsp\\Business\\Business.csproj",
       "projectName": "Business",
-      "projectPath": "D:\\Projects\\VSprojects\\StudentExaminationSystemAsp\\Business\\Business.csproj",
+      "projectPath": "D:\\Projects\\VSprojects\\ActiveProjects\\StudentExaminationSystemAsp\\Business\\Business.csproj",
       "packagesPath": "C:\\Users\\yunis\\.nuget\\packages\\",
-      "outputPath": "D:\\Projects\\VSprojects\\StudentExaminationSystemAsp\\Business\\obj\\",
+      "outputPath": "D:\\Projects\\VSprojects\\ActiveProjects\\StudentExaminationSystemAsp\\Business\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\Programms\\DevExpress\\Offline Packages",
+        "D:\\Programms\\DevExpress\\Components\\Offline Packages",
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
         "C:\\Users\\yunis\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 19.1.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.2.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 22.2.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3618,19 +3621,20 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "D:\\Programms\\DevExpress\\Bin\\Framework": {},
-        "D:\\Programms\\DevExpress\\Offline Packages": {},
+        "D:\\Programms\\DevExpress\\Components\\System\\Components\\Packages": {},
+        "D:\\Programms\\DevExpress\\Components\\System\\Components\\Packages": {},
+        "D:\\Programms\\DevExpress\\System\\Components\\Packages": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\Projects\\VSprojects\\StudentExaminationSystemAsp\\DataAccess\\DataAccess.csproj": {
-              "projectPath": "D:\\Projects\\VSprojects\\StudentExaminationSystemAsp\\DataAccess\\DataAccess.csproj"
+            "D:\\Projects\\VSprojects\\ActiveProjects\\StudentExaminationSystemAsp\\DataAccess\\DataAccess.csproj": {
+              "projectPath": "D:\\Projects\\VSprojects\\ActiveProjects\\StudentExaminationSystemAsp\\DataAccess\\DataAccess.csproj"
             },
-            "D:\\Projects\\VSprojects\\StudentExaminationSystemAsp\\Entities\\Entities.csproj": {
-              "projectPath": "D:\\Projects\\VSprojects\\StudentExaminationSystemAsp\\Entities\\Entities.csproj"
+            "D:\\Projects\\VSprojects\\ActiveProjects\\StudentExaminationSystemAsp\\Entities\\Entities.csproj": {
+              "projectPath": "D:\\Projects\\VSprojects\\ActiveProjects\\StudentExaminationSystemAsp\\Entities\\Entities.csproj"
             }
           }
         }

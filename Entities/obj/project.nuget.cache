@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dNevGTk1okTCJv58A8Geaqqmi9SLjreRaS5pr++wflCNrPnJl3yHnkQi5ZjS3HUluhdmE8vo/tXfI9t2NXE1nw==",
+  "dgSpecHash": "2ddloze/K/wLtPEzlNg0+Z2A8MEzi+q0UmLdeAP0qEl712EwQZCeELcGRojvmDaaH1EQWh9gI8hs8Kwz58Y3Mw==",
   "success": true,
-  "projectFilePath": "D:\\Projects\\VSprojects\\StudentExaminationSystemAsp\\Entities\\Entities.csproj",
+  "projectFilePath": "D:\\Projects\\VSprojects\\ActiveProjects\\StudentExaminationSystemAsp\\Entities\\Entities.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\yunis\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
     "C:\\Users\\yunis\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

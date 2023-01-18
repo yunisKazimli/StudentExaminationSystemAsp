@@ -5,7 +5,9 @@ using Entities.DTOs.Examination;
 using Entities.DTOs.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using MongoDB.Bson.IO;
 using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json;
 
 namespace StudentExaminationSystemAsp.Controllers
 {
@@ -19,8 +21,10 @@ namespace StudentExaminationSystemAsp.Controllers
         }
 
         [HttpPost("addgroup")]
-        public IActionResult AddGroup(GroupDTO group)
+        public IActionResult AddGroup(string jsonData/*GroupDTO group*/)
         {
+            GroupDTO group = JsonSerializer.Deserialize<GroupDTO>(jsonData);
+
             string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 
             if (token == null || token == "") return Unauthorized();
@@ -35,12 +39,14 @@ namespace StudentExaminationSystemAsp.Controllers
 
             if (result.Success) return Ok(result.Message);
 
-            return BadRequest(result.Message);
+            return Problem(result.Message);
         }
 
         [HttpPost("addusertogroup")]
-        public IActionResult AddUserToGroup(UserToGroupDTO userToGroup)
+        public IActionResult AddUserToGroup(string jsonData/*UserToGroupDTO userToGroup*/)
         {
+            UserToGroupDTO userToGroup = JsonSerializer.Deserialize<UserToGroupDTO>(jsonData);
+
             string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 
             if (token == null || token == "") return Unauthorized();
@@ -55,15 +61,13 @@ namespace StudentExaminationSystemAsp.Controllers
 
             if (result.Success) return Ok(result.Message);
 
-            return BadRequest(result.Message);
+            return Problem(result.Message);
         }
 
         [HttpPost("addquestion")]
-        public IActionResult AddQuestions(QuestionDTO questions, string[] optionBodyArray, bool[] isRightArray)
+        public IActionResult AddQuestions(string jsonData/*QuestionDTO questions*/)
         {
-            questions.Options = new List<OptionDTO>();
-
-            for (int i = 0; i < optionBodyArray.Length; i++) questions.Options.Add(new OptionDTO() { Body = optionBodyArray[i], IsRight = isRightArray[i] });
+            QuestionDTO questions = JsonSerializer.Deserialize<QuestionDTO>(jsonData);
 
             string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 
@@ -79,12 +83,14 @@ namespace StudentExaminationSystemAsp.Controllers
 
             if (result.Success) return Ok(result.Message);
 
-            return BadRequest(result.Message);
+            return Problem(result.Message);
         }
 
         [HttpPost("addstudentanswer")]
-        public IActionResult AddStudentAnswer(StudentAnswerDTO studentAnswer)
+        public IActionResult AddStudentAnswer(string jsonData/*StudentAnswerDTO studentAnswer*/)
         {
+            StudentAnswerDTO studentAnswer = JsonSerializer.Deserialize<StudentAnswerDTO>(jsonData);
+
             string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 
             if (token == null || token == "") return Unauthorized();
@@ -96,7 +102,7 @@ namespace StudentExaminationSystemAsp.Controllers
 
             if (result.Success) return Ok(result.Message);
 
-            return BadRequest(result.Message);
+            return Problem(result.Message);
         }
 
         [HttpGet("getallgroups")]
@@ -116,7 +122,7 @@ namespace StudentExaminationSystemAsp.Controllers
 
             if (result.Success) return Ok(result.Data);
 
-            return BadRequest(result.Message);
+            return Problem(result.Message);
         }
 
         [HttpGet("getallgroupsbyinstructorid")]
@@ -136,12 +142,14 @@ namespace StudentExaminationSystemAsp.Controllers
 
             if (result.Success) return Ok(result.Data);
 
-            return BadRequest(result.Message);
+            return Problem(result.Message);
         }
 
         [HttpGet("getallquestions")]
-        public IActionResult GetAllQuestions(Guid GroupId)
+        public IActionResult GetAllQuestions(string jsonData/*Guid GroupId*/)
         {
+            Guid GroupId = JsonSerializer.Deserialize<Guid>(jsonData);
+
             string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 
             if (token == null || token == "") return Unauthorized();
@@ -150,21 +158,23 @@ namespace StudentExaminationSystemAsp.Controllers
 
             if (result.Success) return Ok(result.Data);
 
-            return BadRequest(result.Message);
+            return Problem(result.Message);
         }
 
         [HttpGet("getallstudentanswers")]
-        public IActionResult GetAllStudentAnswers(Guid GroupId, Guid StudentId)
+        public IActionResult GetAllStudentAnswers(string jsonData/*AllStudentAnswersIdsDTO stdudentAnswersIds*/)
         {
+            AllStudentAnswersIdsDTO stdudentAnswersIds = JsonSerializer.Deserialize<AllStudentAnswersIdsDTO>(jsonData);
+
             string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 
             if (token == null || token == "") return Unauthorized();
 
-            var result = _examService.GetAllStudentAnswers(GroupId, StudentId);
+            var result = _examService.GetAllStudentAnswers(stdudentAnswersIds.GroupId, stdudentAnswersIds.StudentId);
 
             if (result.Success) return Ok(result.Data);
 
-            return BadRequest(result.Message);
+            return Problem(result.Message);
         }
     }
 }

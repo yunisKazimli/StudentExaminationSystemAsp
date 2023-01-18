@@ -61,7 +61,7 @@ namespace Business.Concrete.Identity
             {
                 User user = _authDal.Get<User>(el => el.UserName == login.Username);
 
-                if (user == null) throw new Exception("This username is wrong");
+                if (user == null) throw new Exception("This username not found");
 
                 if (!HashingHelper.VerifyPassword(login.Password, user.PasswordHash, user.PasswordSalt)) throw new Exception("Username or password is wrong");
 
@@ -69,11 +69,11 @@ namespace Business.Concrete.Identity
 
                 user.UserRole.Role = _authDal.Get<Role>(el => el.RoleId == user.UserRole.RoleId);
 
-                return new SuccessDataResult<string>(TokenGenerator.Token(user, user.UserRole.Role.RoleName));
+                return new SuccessDataResult<string>(user.UserRole.Role.RoleName + " " + TokenGenerator.Token(user, user.UserRole.Role.RoleName));
             }
             catch (Exception e)
             {
-                return new ErrorDataResult<string>("Something went wrong");
+                return new ErrorDataResult<string>(e.Message);
             }
         }
 
@@ -115,7 +115,7 @@ namespace Business.Concrete.Identity
             }
             catch (Exception e)
             {
-                return new ErrorResult("Something went wrong:\n" + e.Message);
+                return new ErrorResult(e.Message);
             }
         }
     }
