@@ -1,4 +1,5 @@
-﻿using Business.Interface.Identity;
+﻿using Business.Interface.Examination;
+using Business.Interface.Identity;
 using CorePackage.Entities.Concrete;
 using CorePackage.Helpers.Result.Abstract;
 using CorePackage.Helpers.Result.Concrete.ErrorResults;
@@ -7,8 +8,10 @@ using CorePackage.Security.Hashing;
 using CorePackage.Security.Jwt;
 using DataAccess.Interface.Identity;
 using DnsClient;
+using Entities.Concrete.Examination;
 using Entities.DTOs.Examination.GetDTOs;
 using Entities.DTOs.Identity;
+using Entities.DTOs.Identity.GetDTOs;
 using MongoDB.Driver.Core.Authentication;
 using System;
 using System.Collections.Generic;
@@ -27,15 +30,42 @@ namespace Business.Concrete.Identity
             _authDal = authDal;
         }
 
+        public IDataResult<List<RoleGetDTO>> GetAllRoles()
+        {
+            try
+            {
+                List<Role> roles = _authDal.GetSome<Role>(el => el.RoleName != "Admin");
+
+                List<RoleGetDTO> rolesGetDTO;
+
+                rolesGetDTO =
+                    (
+                        from el
+                        in roles
+                        select new RoleGetDTO()
+                        {
+                            RoleId = el.RoleId,
+                            RoleName = el.RoleName
+                        }
+                    ).ToList();
+
+                return new SuccessDataResult<List<RoleGetDTO>>(rolesGetDTO);
+            }
+            catch(Exception ex) 
+            {
+                return new ErrorDataResult<List<RoleGetDTO>>(ex.Message);
+            }
+        }
+
         public IDataResult<List<Entities.DTOs.Identity.GetDTOs.UserGetDTO>> GetAllUsers()
         {
             try
             {
-                List<User> users = _authDal.GetSome<User>(el => true);
+                List<User> users = _authDal.GetSome<User>(el => el.UserRole.Role.RoleName != "Admin");
                 List<UserRole> userRoles = _authDal.GetSome<UserRole>(el => true);
                 List<Role> roles = _authDal.GetSome<Role>(el => true);
 
-                List<Entities.DTOs.Identity.GetDTOs.UserGetDTO> usersGetModel =
+                List<UserGetDTO> usersGetModel =
                     (
                         from el
                         in users

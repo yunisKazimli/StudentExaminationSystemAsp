@@ -14,11 +14,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IAuthService, AuthManager>();
-builder.Services.AddScoped<IAuthDal, AuthDal>();
+builder.Services.AddSingleton<IAuthService, AuthManager>();
+builder.Services.AddSingleton<IAuthDal, AuthDal>();
 
-builder.Services.AddScoped<IExamService, ExamManager>();
-builder.Services.AddScoped<IExamDal, ExamDal>();
+builder.Services.AddSingleton<IExamService, ExamManager>();
+builder.Services.AddSingleton<IExamDal, ExamDal>();
 
 builder.Services.AddEndpointsApiExplorer();
 

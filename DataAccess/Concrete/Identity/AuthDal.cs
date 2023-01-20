@@ -31,7 +31,7 @@ namespace DataAccess.Concrete.Identity
         public List<T> GetSome<T>(Expression<Func<T, bool>> filter) where T : class
         {
             using var context = new AuthDbContext();
-            return context.Set<T>().ToList();
+            return context.Set<T>().Where(filter).ToList();
         }
     }
 }

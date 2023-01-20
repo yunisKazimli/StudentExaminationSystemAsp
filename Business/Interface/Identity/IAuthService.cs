@@ -1,6 +1,7 @@
 ﻿using CorePackage.Helpers.Result.Abstract;
 using Entities.DTOs.Examination.GetDTOs;
 using Entities.DTOs.Identity;
+using Entities.DTOs.Identity.GetDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace Business.Interface.Identity
         IResult Register(RegisterDTO register);
         IDataResult<string> Login(LoginDTO login);
         IDataResult<List<Entities.DTOs.Identity.GetDTOs.UserGetDTO>> GetAllUsers();
+        IDataResult<List<RoleGetDTO>> GetAllRoles();
     }
 }
