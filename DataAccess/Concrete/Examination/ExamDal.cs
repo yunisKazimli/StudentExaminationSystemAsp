@@ -32,5 +32,13 @@ namespace DataAccess.Concrete.Examination
             using var context = new ExamDbContext();
             return context.Set<T>().ToList();
         }
+
+        public void Delete<T>(T entity) where T : class
+        {
+            using var context = new ExamDbContext();
+            var deleteEntity = context.Remove(entity);
+            deleteEntity.State = EntityState.Deleted;
+            context.SaveChanges();
+        }
     }
 }

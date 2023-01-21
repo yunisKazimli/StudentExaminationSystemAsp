@@ -16,6 +16,8 @@ namespace Business.Interface.Examination
         IResult AddUserToGroup(UserToGroupDTO userToGroup);
         IResult AddQuestions(List<QuestionDTO> questions);
         IResult AddStudentAnswer(StudentAnswerDTO studentAnswer, string studentId);
+        IResult DeleteGroup(Guid groupId);
+        IResult DeleteUserGroupByUserId(Guid userId);
         IDataResult<List<GroupGetDTO>> GetAllGroups();
         IDataResult<List<GroupGetDTO>> GetAllGroupsByInstructorId(Guid instructorId);
         IDataResult<List<QuestionGetDTO>> GetAllQuestionsInGroup(Guid GroupId);

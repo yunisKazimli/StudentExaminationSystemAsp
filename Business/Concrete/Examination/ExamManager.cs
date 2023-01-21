@@ -173,6 +173,42 @@ namespace Business.Concrete.Examination
             }
         }
 
+        public IResult DeleteGroup(Guid groupId)
+        {
+            try
+            {
+                Group group = _examDal.Get<Group>(el => el.GroupId == groupId);
+
+                _examDal.Delete(group);
+
+                List<UserGroup> userGroup = _examDal.GetSome<UserGroup>(el => el.GroupId == groupId);
+
+                foreach(UserGroup ug in userGroup) _examDal.Delete(ug);
+
+                return new SuccessResult("Group deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResult(ex.Message);
+            }
+        }
+
+        public IResult DeleteUserGroupByUserId(Guid userId)
+        {
+            try
+            {
+                UserGroup userGroup = _examDal.Get<UserGroup>(el => el.UserId == userId);
+
+                _examDal.Delete(userGroup);
+
+                return new SuccessResult("UserGroup deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResult(ex.Message);
+            }
+        }
+
         public IDataResult<List<GroupGetDTO>> GetAllGroups()
         {
             try

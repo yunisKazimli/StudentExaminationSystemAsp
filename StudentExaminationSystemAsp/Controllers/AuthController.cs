@@ -69,11 +69,15 @@ namespace StudentExaminationSystemAsp.Controllers
 
             if (role != "Admin") return Forbid();
 
-            var result = _authService.DeleteUserById(userId);
+            var result1 = _examService.DeleteUserGroupByUserId(userId);
 
-            if (result.Success) return Ok(result.Message);
+            var result2 = _authService.DeleteUserById(userId);
 
-            return Problem(result.Message);
+            if (result1.Success && result2.Success) return Ok(result2.Message);
+
+            else if (!result1.Success) return Problem(result1.Message);
+
+            else return Problem(result2.Message);
         }
 
         [HttpGet("getallusers")]
