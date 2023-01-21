@@ -3,6 +3,7 @@ using CorePackage.Entities;
 using CorePackage.Entities.Concrete;
 using DataAccess.Interface.Identity;
 using Microsoft.EntityFrameworkCore;
+using SharpCompress.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,14 @@ namespace DataAccess.Concrete.Identity
         {
             using var context = new AuthDbContext();
             return context.Set<T>().Where(filter).ToList();
+        }
+
+        public void Delete<T>(T entity) where T : class
+        {
+            using var context = new AuthDbContext();
+            var addEntity = context.Remove<T>(entity);
+            addEntity.State = EntityState.Deleted;
+            context.SaveChanges();
         }
     }
 }

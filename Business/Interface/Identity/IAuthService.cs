@@ -13,8 +13,9 @@ namespace Business.Interface.Identity
     public interface IAuthService
     {
         IResult Register(RegisterDTO register);
+        IResult DeleteUserById(Guid userId);
         IDataResult<string> Login(LoginDTO login);
-        IDataResult<List<Entities.DTOs.Identity.GetDTOs.UserGetDTO>> GetAllUsers();
+        IDataResult<List<UserGetDTO>> GetAllUsers();
         IDataResult<List<RoleGetDTO>> GetAllRoles();
     }
 }

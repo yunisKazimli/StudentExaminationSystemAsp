@@ -185,22 +185,25 @@ namespace Business.Concrete.Examination
 
                 List<GroupGetDTO> groupGetModel = new List<GroupGetDTO>();
 
+                for(int i = 0; i < groups.Count; i++)
+                {
+                    GroupGetDTO newGroup = new GroupGetDTO()
+                    {
+                        GroupId = groups[i].GroupId,
+                        GroupName = groups[i].GroupName,
+                        Students = new List<UserGetDTO>()
+                    };
+
+                    groupGetModel.Add(newGroup);
+                }
+
                 for(int i = 0;i < userGroups.Count;i++)
                 {
-                    if (groupGetModel.Where(el => el.GroupId == userGroups[i].GroupId).Count() == 0)
-                    {
-                        groupGetModel.Add(new GroupGetDTO());
-
-                        groupGetModel[groupGetModel.Count - 1].GroupId = userGroups[i].GroupId;
-                        groupGetModel[groupGetModel.Count - 1].GroupName = groups.FirstOrDefault(el => el.GroupId == userGroups[i].GroupId).GroupName;
-                        groupGetModel[groupGetModel.Count - 1].Students = new List<UserGetDTO>();
-                    }
-
                     UserGetDTO user = allUsers.FirstOrDefault(el => el.UserId == userGroups[i].UserId);
 
                     GroupGetDTO group = groupGetModel.FirstOrDefault(el => el.GroupId == userGroups[i].GroupId);
 
-                    if (user.Role == "Instructor")
+                    if (user.Role == "Student")
                         groupGetModel.Find(el => el == group).Instructor = user;
                     else
                         groupGetModel.Find(el => el == group).Students.Add(user);

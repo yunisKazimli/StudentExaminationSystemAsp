@@ -5,6 +5,7 @@ using DnsClient;
 using Entities.DTOs.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using MongoDB.Bson.IO;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
 
@@ -49,6 +50,26 @@ namespace StudentExaminationSystemAsp.Controllers
             LoginDTO login = JsonSerializer.Deserialize<LoginDTO>(jsonData);
 
             var result = _authService.Login(login);
+
+            if (result.Success) return Ok(result.Message);
+
+            return Problem(result.Message);
+        }
+
+        [HttpGet("deleteUserById")]
+        public IActionResult DeleteUserById(Guid userId)
+        {
+            string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+
+            if (token == null || token == "") return Unauthorized();
+
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken jwtSecurityToken = handler.ReadJwtToken(token);
+            string role = jwtSecurityToken.Claims.FirstOrDefault(x => x.Type == "role").Value;
+
+            if (role != "Admin") return Forbid();
+
+            var result = _authService.DeleteUserById(userId);
 
             if (result.Success) return Ok(result.Message);
 

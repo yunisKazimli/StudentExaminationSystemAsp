@@ -16,5 +16,6 @@ namespace DataAccess.Interface.Identity
         void Add<T>(T entity);
         T Get<T>(Expression<Func<T, bool>> filter) where T : class;
         List<T> GetSome<T>(Expression<Func<T, bool>> filter) where T : class;
+        void Delete<T>(T entity) where T : class;
     }
 }

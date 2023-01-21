@@ -1,5 +1,4 @@
-﻿using Business.Interface.Examination;
-using Business.Interface.Identity;
+﻿using Business.Interface.Identity;
 using CorePackage.Entities.Concrete;
 using CorePackage.Helpers.Result.Abstract;
 using CorePackage.Helpers.Result.Concrete.ErrorResults;
@@ -7,17 +6,8 @@ using CorePackage.Helpers.Result.Concrete.SuccessResults;
 using CorePackage.Security.Hashing;
 using CorePackage.Security.Jwt;
 using DataAccess.Interface.Identity;
-using DnsClient;
-using Entities.Concrete.Examination;
-using Entities.DTOs.Examination.GetDTOs;
 using Entities.DTOs.Identity;
 using Entities.DTOs.Identity.GetDTOs;
-using MongoDB.Driver.Core.Authentication;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete.Identity
 {
@@ -28,6 +18,22 @@ namespace Business.Concrete.Identity
         public AuthManager(IAuthDal authDal)
         {
             _authDal = authDal;
+        }
+
+        public IResult DeleteUserById(Guid userId)
+        {
+            try
+            {
+                User user = _authDal.Get<User>(el => el.UserId == userId && el.UserRole.Role.RoleName != "Admin");
+
+                _authDal.Delete<User>(user);
+
+                return new SuccessResult("User deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResult(ex.Message);
+            }
         }
 
         public IDataResult<List<RoleGetDTO>> GetAllRoles()
@@ -57,7 +63,7 @@ namespace Business.Concrete.Identity
             }
         }
 
-        public IDataResult<List<Entities.DTOs.Identity.GetDTOs.UserGetDTO>> GetAllUsers()
+        public IDataResult<List<UserGetDTO>> GetAllUsers()
         {
             try
             {
@@ -69,7 +75,7 @@ namespace Business.Concrete.Identity
                     (
                         from el
                         in users
-                        select new Entities.DTOs.Identity.GetDTOs.UserGetDTO()
+                        select new UserGetDTO()
                         {
                             UserId = el.UserId,
                             UserName = el.UserName,
@@ -77,11 +83,11 @@ namespace Business.Concrete.Identity
                         }
                     ).ToList();
 
-                return new SuccessDataResult<List<Entities.DTOs.Identity.GetDTOs.UserGetDTO>>(usersGetModel);
+                return new SuccessDataResult<List<UserGetDTO>>(usersGetModel);
             }
             catch (Exception ex)
             {
-                return new ErrorDataResult<List<Entities.DTOs.Identity.GetDTOs.UserGetDTO>>(ex.Message); 
+                return new ErrorDataResult<List<UserGetDTO>>(ex.Message); 
             }
         }
 
