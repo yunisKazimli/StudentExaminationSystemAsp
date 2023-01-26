@@ -155,6 +155,15 @@ namespace Business.Concrete.Examination
                 if (_examDal.Get<UserGroup>(el => el.GroupId == new Guid(userToGroup.GroupId) && el.UserId == new Guid(userToGroup.UserId)) != null)
                     throw new Exception("This user is already in this group");
 
+                UserGetDTO userGetDTO = _authService.GetAllUsers().Data.FirstOrDefault(el => el.UserId == new Guid(userToGroup.UserId));
+
+                GroupGetDTO group = GetAllGroups().Data.FirstOrDefault(el => el.GroupId == new Guid(userToGroup.GroupId));
+
+                if (userGetDTO.Role == "Instructor" && group.Instructor != null)
+                {
+                    DeleteUserFromGroup(new UserToGroupDTO() { GroupId = userToGroup.GroupId, UserId = group.Instructor.UserId.ToString() });
+                }
+
                 UserGroup newUserGroup = new UserGroup()
                 {
                     UserGroupId = Guid.NewGuid(),
@@ -186,6 +195,22 @@ namespace Business.Concrete.Examination
                 foreach(UserGroup ug in userGroup) _examDal.Delete(ug);
 
                 return new SuccessResult("Group deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResult(ex.Message);
+            }
+        }
+
+        public IResult DeleteUserFromGroup(UserToGroupDTO userToGroup)
+        {
+            try
+            {
+                UserGroup userGroup = _examDal.Get<UserGroup>(el => el.GroupId == new Guid(userToGroup.GroupId) && el.UserId == new Guid(userToGroup.UserId));
+
+                _examDal.Delete(userGroup);
+
+                return new SuccessResult("User deleted from group successfully");
             }
             catch (Exception ex)
             {
@@ -239,7 +264,7 @@ namespace Business.Concrete.Examination
 
                     GroupGetDTO group = groupGetModel.FirstOrDefault(el => el.GroupId == userGroups[i].GroupId);
 
-                    if (user.Role == "Student")
+                    if (user.Role == "Instructor")
                         groupGetModel.Find(el => el == group).Instructor = user;
                     else
                         groupGetModel.Find(el => el == group).Students.Add(user);
