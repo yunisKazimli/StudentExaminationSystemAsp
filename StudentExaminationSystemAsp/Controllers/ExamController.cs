@@ -1,7 +1,9 @@
 ﻿using Business.Interface.Examination;
 using Business.Interface.Identity;
+using CorePackage.Helpers.Result.Abstract;
 using Entities.Concrete.Examination;
 using Entities.DTOs.Examination;
+using Entities.DTOs.Examination.GetDTOs;
 using Entities.DTOs.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -64,10 +66,10 @@ namespace StudentExaminationSystemAsp.Controllers
             return Problem(result.Message);
         }
 
-        [HttpPost("addquestion")]
-        public IActionResult AddQuestions(string jsonData/*QuestionDTO questions*/)
+        [HttpPost("addquestions")]
+        public IActionResult AddQuestions(string jsonData/*List<QuestionDTO> questions*/)
         {
-            QuestionDTO questions = JsonSerializer.Deserialize<QuestionDTO>(jsonData);
+            List<QuestionDTO> questions = JsonSerializer.Deserialize<List<QuestionDTO>>(jsonData);
 
             string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 
@@ -79,7 +81,7 @@ namespace StudentExaminationSystemAsp.Controllers
 
             if (role == "Student") return Forbid();
 
-            var result = _examService.AddQuestions(new QuestionDTO[] { questions }.ToList());
+            var result = _examService.AddQuestions(questions);
 
             if (result.Success) return Ok(result.Message);
 
@@ -156,9 +158,19 @@ namespace StudentExaminationSystemAsp.Controllers
             JwtSecurityToken jwtSecurityToken = handler.ReadJwtToken(token);
             string role = jwtSecurityToken.Claims.FirstOrDefault(x => x.Type == "role").Value;
 
-            if (role != "Admin") return Forbid();
+            if (role != "Admin" && role != "Instructor") return Forbid();
 
-            var result = _examService.GetAllGroups();
+            IDataResult<List<GroupGetDTO>> result;
+
+            if (role == "Admin")
+            {
+                result = _examService.GetAllGroups();
+            }
+
+            else
+            {
+                return GetAllGroupsByInstructorId();
+            }
 
             if (result.Success) return Ok(result.Data);
 
