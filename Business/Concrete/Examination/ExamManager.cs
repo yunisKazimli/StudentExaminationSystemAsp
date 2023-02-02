@@ -80,12 +80,12 @@ namespace Business.Concrete.Examination
 
                     _examDal.Add(newQuestion);
 
-                    foreach(OptionDTO qdtoo in qdto.Options)
+                    if (qdto.Options.Count == 0)
                     {
                         Option newOption = new Option()
                         {
                             Id = Guid.NewGuid(),
-                            Body = qdtoo.Body,
+                            Body = "empty",
                             QuestionId = newQuestion.QuestionId,
                             Question = _examDal.Get<Question>(el => el.QuestionId == newQuestion.QuestionId),
                             IsRight = true
@@ -94,6 +94,25 @@ namespace Business.Concrete.Examination
                         newOption.Question.Group = _examDal.Get<Group>(el => el.GroupId == new Guid(qdto.GroupId));
 
                         _examDal.Add(newOption);
+                    }
+
+                    else
+                    {
+                        foreach (OptionDTO qdtoo in qdto.Options)
+                        {
+                            Option newOption = new Option()
+                            {
+                                Id = Guid.NewGuid(),
+                                Body = qdtoo.Body,
+                                QuestionId = newQuestion.QuestionId,
+                                Question = _examDal.Get<Question>(el => el.QuestionId == newQuestion.QuestionId),
+                                IsRight = qdtoo.IsRight
+                            };
+
+                            newOption.Question.Group = _examDal.Get<Group>(el => el.GroupId == new Guid(qdto.GroupId));
+
+                            _examDal.Add(newOption);
+                        }
                     }
                 }
 
@@ -343,7 +362,7 @@ namespace Business.Concrete.Examination
                                 Options = 
                                     (
                                         from el
-                                        in options
+                                        in options.Where(el1 => el1.QuestionId == questions[i].QuestionId)
                                         select new OptionGetDTO()
                                         {
                                             OptionId = el.Id,

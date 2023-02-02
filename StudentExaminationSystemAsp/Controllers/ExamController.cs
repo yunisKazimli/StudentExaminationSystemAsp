@@ -198,13 +198,11 @@ namespace StudentExaminationSystemAsp.Controllers
         }
 
         [HttpGet("getallquestions")]
-        public IActionResult GetAllQuestions(string jsonData/*Guid GroupId*/)
+        public IActionResult GetAllQuestions(Guid GroupId)
         {
-            Guid GroupId = JsonSerializer.Deserialize<Guid>(jsonData);
+            // string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 
-            string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
-
-            if (token == null || token == "") return Unauthorized();
+            // if (token == null || token == "") return Unauthorized();
 
             var result = _examService.GetAllQuestionsInGroup(GroupId);
 
