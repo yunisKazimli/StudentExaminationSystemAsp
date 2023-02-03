@@ -147,6 +147,26 @@ namespace StudentExaminationSystemAsp.Controllers
             return Problem(result.Message);
         }
 
+        [HttpGet("deletequestion")]
+        public IActionResult DeleteQuestion(DeleteQuestionDTO deleteQuestion)
+        {
+            string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+
+            if (token == null || token == "") return Unauthorized();
+
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken jwtSecurityToken = handler.ReadJwtToken(token);
+            string role = jwtSecurityToken.Claims.FirstOrDefault(x => x.Type == "role").Value;
+
+            if (role != "Admin" && role != "Instructor") return Forbid();
+
+            var result = _examService.DeleteQuestion(deleteQuestion);
+
+            if (result.Success) return Ok(result.Message);
+
+            return Problem(result.Message);
+        }
+
         [HttpGet("getallgroups")]
         public IActionResult GetAllGroups()
         {

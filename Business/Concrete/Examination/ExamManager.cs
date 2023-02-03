@@ -221,6 +221,22 @@ namespace Business.Concrete.Examination
             }
         }
 
+        public IResult DeleteQuestion(DeleteQuestionDTO deleteQuestion)
+        {
+            try
+            {
+                Question foundQuestion = _examDal.Get<Question>(el => el.GroupId == deleteQuestion.GroupId && el.QuestionId == deleteQuestion.QuestionId);
+
+                _examDal.Delete(foundQuestion);
+                
+                return new SuccessResult("Question deleted successfully");
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResult(ex.Message);
+            }
+        }
+
         public IResult DeleteUserFromGroup(UserToGroupDTO userToGroup)
         {
             try
