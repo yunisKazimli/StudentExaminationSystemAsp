@@ -106,7 +106,7 @@ namespace Business.Concrete.Identity
 
                 user.UserRole.Role = _authDal.Get<Role>(el => el.RoleId == user.UserRole.RoleId);
 
-                return new SuccessDataResult<string>(user.UserRole.Role.RoleName + " " + TokenGenerator.Token(user, user.UserRole.Role.RoleName));
+                return new SuccessDataResult<string>(user.UserRole.Role.RoleName + " " + TokenGenerator.Token(user, user.UserRole.Role.RoleName) + " " + user.UserId.ToString());
             }
             catch (Exception e)
             {

@@ -22,6 +22,7 @@ namespace Business.Interface.Examination
         IResult DeleteQuestion(DeleteQuestionDTO deleteQuestion);
         IDataResult<List<GroupGetDTO>> GetAllGroups();
         IDataResult<List<GroupGetDTO>> GetAllGroupsByInstructorId(Guid instructorId);
+        IDataResult<List<GroupGetDTO>> GetAllGroupsByStudentId(Guid studentId);
         IDataResult<List<QuestionGetDTO>> GetAllQuestionsInGroup(Guid GroupId);
         IDataResult<List<StudentAnswerGetDTO>> GetAllStudentAnswers(Guid GroupId, Guid StudentId);
     }

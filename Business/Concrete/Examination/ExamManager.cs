@@ -131,8 +131,9 @@ namespace Business.Concrete.Examination
         {
             try
             {
-                if (_examDal.Get<StudentAnswer>(el => el.UserId == new Guid(studentId) && el.QuestionId == new Guid(studentAnswer.QuestionId)) != null)
-                    throw new Exception("This user is already answered to this question");
+                StudentAnswer foundAnswer = _examDal.Get<StudentAnswer>(el => el.UserId == new Guid(studentId) && el.QuestionId == new Guid(studentAnswer.QuestionId));
+
+                if (foundAnswer != null) _examDal.Delete(foundAnswer);
 
                 StudentAnswer newStudentAnswer = new StudentAnswer()
                 {
@@ -347,6 +348,49 @@ namespace Business.Concrete.Examination
                 }
 
                 groupGetModel = groupGetModel.Where(el => el.Instructor != null && el.Instructor.UserId == instructorId).ToList();
+
+                return new SuccessDataResult<List<GroupGetDTO>>(groupGetModel);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorDataResult<List<GroupGetDTO>>(ex.Message);
+            }
+        }
+
+        public IDataResult<List<GroupGetDTO>> GetAllGroupsByStudentId(Guid studentId)
+        {
+            try
+            {
+                List<Group> groups = _examDal.GetSome<Group>(el => true);
+
+                List<UserGroup> userGroups = _examDal.GetSome<UserGroup>(el => true);
+
+                List<UserGetDTO> allUsers = _authService.GetAllUsers().Data;
+
+                List<GroupGetDTO> groupGetModel = new List<GroupGetDTO>();
+
+                for (int i = 0; i < userGroups.Count; i++)
+                {
+                    if (groupGetModel.Where(el => el.GroupId == userGroups[i].GroupId).Count() == 0)
+                    {
+                        groupGetModel.Add(new GroupGetDTO());
+
+                        groupGetModel[groupGetModel.Count - 1].GroupId = userGroups[i].GroupId;
+                        groupGetModel[groupGetModel.Count - 1].GroupName = groups.FirstOrDefault(el => el.GroupId == userGroups[i].GroupId).GroupName;
+                        groupGetModel[groupGetModel.Count - 1].Students = new List<UserGetDTO>();
+                    }
+
+                    UserGetDTO user = allUsers.FirstOrDefault(el => el.UserId == userGroups[i].UserId);
+
+                    GroupGetDTO group = groupGetModel.FirstOrDefault(el => el.GroupId == userGroups[i].GroupId);
+
+                    if (user.Role == "Instructor")
+                        groupGetModel.Find(el => el == group).Instructor = user;
+                    else
+                        groupGetModel.Find(el => el == group).Students.Add(user);
+                }
+
+                groupGetModel = groupGetModel.Where(el => el.Students.FirstOrDefault(el1 => el1.UserId == studentId) != null).ToList();
 
                 return new SuccessDataResult<List<GroupGetDTO>>(groupGetModel);
             }

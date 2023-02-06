@@ -178,8 +178,6 @@ namespace StudentExaminationSystemAsp.Controllers
             JwtSecurityToken jwtSecurityToken = handler.ReadJwtToken(token);
             string role = jwtSecurityToken.Claims.FirstOrDefault(x => x.Type == "role").Value;
 
-            if (role != "Admin" && role != "Instructor") return Forbid();
-
             IDataResult<List<GroupGetDTO>> result;
 
             if (role == "Admin")
@@ -187,9 +185,14 @@ namespace StudentExaminationSystemAsp.Controllers
                 result = _examService.GetAllGroups();
             }
 
-            else
+            else if (role == "Instructor")
             {
                 return GetAllGroupsByInstructorId();
+            }
+
+            else
+            {
+                return GetAllGroupsByStudentId();
             }
 
             if (result.Success) return Ok(result.Data);
@@ -217,12 +220,28 @@ namespace StudentExaminationSystemAsp.Controllers
             return Problem(result.Message);
         }
 
+        public IActionResult GetAllGroupsByStudentId()
+        {
+            string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+
+            if (token == null || token == "") return Unauthorized();
+
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken jwtSecurityToken = handler.ReadJwtToken(token);
+
+            var result = _examService.GetAllGroupsByStudentId(new Guid(jwtSecurityToken.Claims.FirstOrDefault(x => x.Type == "nameid").Value));
+
+            if (result.Success) return Ok(result.Data);
+
+            return Problem(result.Message);
+        }
+
         [HttpGet("getallquestions")]
         public IActionResult GetAllQuestions(Guid GroupId)
         {
-            // string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+            string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 
-            // if (token == null || token == "") return Unauthorized();
+            if (token == null || token == "") return Unauthorized();
 
             var result = _examService.GetAllQuestionsInGroup(GroupId);
 
@@ -232,10 +251,8 @@ namespace StudentExaminationSystemAsp.Controllers
         }
 
         [HttpGet("getallstudentanswers")]
-        public IActionResult GetAllStudentAnswers(string jsonData/*AllStudentAnswersIdsDTO stdudentAnswersIds*/)
+        public IActionResult GetAllStudentAnswers(AllStudentAnswersIdsDTO stdudentAnswersIds)
         {
-            AllStudentAnswersIdsDTO stdudentAnswersIds = JsonSerializer.Deserialize<AllStudentAnswersIdsDTO>(jsonData);
-
             string token = Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
 
             if (token == null || token == "") return Unauthorized();
